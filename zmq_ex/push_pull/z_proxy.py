@@ -1,28 +1,37 @@
+import threading
 import zmq
-import time
+import random
 
 
-context = zmq.Context()
-socket = context.socket(zmq.PUB)
-socket.bind("tcp://127.0.0.1:%d" % 5555)
-
-socket_sink = context.socket(zmq.PULL)
-socket_sink.bind("tcp://127.0.0.1:%d" % 5557)
-
-socket_client_in = context.socket(zmq.PULL)
-socket_client_in.bind("tcp://127.0.0.1:%d" % 5559)
-
-socket_client_out = context.socket(zmq.PUB)
-socket_client_out.bind("tcp://127.0.0.1:%d" % 5561)
+def gen_id():
+    return str(random.randint(0, 100000)).encode()
 
 
-while True:
-    msg = socket_client_in.recv()
-    print('PROXY recv', msg)
-    socket.send(msg)
+def main():
+    # Prepare our context and publisher
+    context = zmq.Context()
+    publisher = context.socket(zmq.PUB)
+    publisher.bind("tcp://*:5563")
 
-    print('PROXY pub', msg)
-    reply = socket_sink.recv()
-    print('PROYX recv from server', reply)
-    # socket_client.send(reply)
-    # print('iteration finished')
+    C_receiver = context.socket(zmq.PULL)
+    C_receiver.bind("tcp://*:5564")
+
+    S_receiver = context.socket(zmq.PULL)
+    S_receiver.bind("tcp://*:5565")
+
+    sender = context.socket(zmq.PUSH)
+    sender.bind("tcp://*:5566")
+
+    while True:
+        # Write two messages, each with an envelope and content
+        msg = C_receiver.recv()
+        _id = gen_id()
+        publisher.send_multipart([b"A", _id, msg])
+        res = S_receiver.recv_multipart()
+
+    # We never get here but clean up anyhow
+    publisher.close()
+    context.term()
+
+if __name__ == "__main__":
+    main()
