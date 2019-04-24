@@ -1,0 +1,17 @@
+version: '3.4'
+services:
+  income-proxy:
+    image: stevenjosbsbsb/test
+    networks:
+      gnes-net:
+        aliases:
+          - income_proxy
+    ports:
+      - 5563:5563
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+
+networks:
+  gnes-net:

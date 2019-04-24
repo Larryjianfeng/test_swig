@@ -1,0 +1,9 @@
+1: 使用docker stack deploy --compose-file=docker-compose.yml test命令前
+    1.1 要先用docker swarm init配置好环境
+
+2: docker stack services test能够看到tag是test时候的真实service name
+    2.1 真实service name的一般格式是，比如当前目录是dir，yml里面命名的service是ss, 
+        那么service name=dir_ss
+
+3: 比如真实的service name是test_income-proxy 
+    3.1 只能用docker service logs test_income-proxy查看log

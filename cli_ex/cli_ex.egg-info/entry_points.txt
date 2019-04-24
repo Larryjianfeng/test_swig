@@ -1,0 +1,3 @@
+[console_scripts]
+ss = cli_ex:ex
+

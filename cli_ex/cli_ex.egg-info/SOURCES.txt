@@ -1,0 +1,8 @@
+setup.py
+cli_ex.egg-info/PKG-INFO
+cli_ex.egg-info/SOURCES.txt
+cli_ex.egg-info/dependency_links.txt
+cli_ex.egg-info/entry_points.txt
+cli_ex.egg-info/top_level.txt
+src/__init__.py
+src/main.py
