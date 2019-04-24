@@ -1,5 +1,6 @@
 import threading
 import zmq
+import zmq.decorators as zmqd
 import random
 
 num_parts = 3
@@ -15,7 +16,10 @@ class ProxyIn(threading.Thread):
         super().__init__()
 
     def run(self):
-        context = zmq.Context()
+        self._run()
+
+    @zmqd.context()
+    def _run(self, context):
         publisher = context.socket(zmq.PUB)
         publisher.bind("tcp://*:5563")
 
@@ -29,7 +33,6 @@ class ProxyIn(threading.Thread):
 
         publisher.close()
         C_receiver.close()
-        context.term()
 
     def __enter__(self):
         self.start()
@@ -46,7 +49,10 @@ class ProxyOut(threading.Thread):
         super().__init__()
 
     def run(self):
-        context = zmq.Context()
+        self._run()
+
+    @zmqd.context()
+    def _run(self, context):
 
         S_receiver = context.socket(zmq.PULL)
         S_receiver.bind("tcp://*:5565")
@@ -69,7 +75,6 @@ class ProxyOut(threading.Thread):
 
         S_receiver.close()
         sender.close()
-        context.term()
 
     def __enter__(self):
         self.start()

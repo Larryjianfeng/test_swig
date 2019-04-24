@@ -25,8 +25,10 @@ def main():
         # Receive from proxy
         [address, _id, contents] = subscriber.recv_multipart()
         print('server received')
+        logger.info('server received')
         # process data
         contents = trans(contents)
+        logger.info(contents)
         # send out data
         receiver.send_multipart([_id, contents, server_id])
         print('server send')
