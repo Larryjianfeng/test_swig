@@ -27,7 +27,7 @@ async def init(loop):
 
     runner = web.AppRunner(app)
     await runner.setup()
-    site = web.TCPSite(runner, 'localhost', 8070)
+    site = web.TCPSite(runner, '127.0.0.1', 8070)
     await site.start()
 
 
