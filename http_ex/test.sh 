@@ -1,0 +1,4 @@
+curl --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"x": 'abc'}' \
+  http://localhost:80/gnes
